@@ -22,6 +22,8 @@ function App() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
+  const [history, setHistory] = useState([]);
+
 
   const getWeather = async () => {
     if (!city) return;
@@ -35,10 +37,18 @@ function App() {
     try {
       const res = await axios.get(`http://localhost:5000/weather?city=${city}`);
       setWeather(res.data);
-      setShowVideo(true);
-
       
-      setTimeout(() => setShowVideo(false), 100000000);
+      setHistory(prev => {
+      const alreadyExists = prev.includes(city);
+      if (!alreadyExists) {
+        return [...prev, city];
+      }
+      return prev;
+      });
+
+      setShowVideo(true);
+        
+     setTimeout(() => setShowVideo(false), 100000000);
     } catch (err) {
       setError('Nav Chukicha Takla Bhava Ashi City Ahaich Nahi');
     } finally {
@@ -69,7 +79,7 @@ function App() {
     }
     if (condition.includes('cloud')) {
       return {
-        message: "🌥 Tejas is missing but the clouds are not!",
+        message: "🌥 Tejas's hair are missing but the clouds are not!",
         image: cloudyTejas,
       };
     }
@@ -104,12 +114,15 @@ function App() {
         <img src={weatherIcon} alt="Weather Icon" style={{ width: '300px', borderRadius: '50%' }} />
         <h1 style={{
           fontSize: '2.5rem',
-          fontWeight: '600',
-          margin: '1rem 0',
-          color: '#1e1e1e'
-      }}>
-             Tejas Weather App
+          fontWeight: '700',
+          margin: '1.5rem 0',
+          color:'rgb(18, 24, 18)',
+          textShadow: '1px 1px 4px rgba(237, 227, 227, 0.5)',
+          letterSpacing: '1px'
+          }}>
+            Tejas Weather Hub
       </h1>
+
 
       </div>
 
@@ -170,6 +183,7 @@ function App() {
 
 
   {weather && (
+    
     <div style={{ marginTop: '1rem', backgroundColor: 'rgba(255, 255, 255, 0.1)', padding: '1rem', borderRadius: '10px' }}>
       <h1>{weather.name}</h1>
         <p><h3>{weather.weather[0].description}</h3></p>
@@ -182,6 +196,7 @@ function App() {
           alt="Custom Weather Icon"
           style={{ width: '100px', height: '100px', borderRadius: '10px', marginTop: '0.5rem' }}
         />
+    
         {(() => {
       const { message, image } = getFunnyTejasMessage();
       return (
@@ -194,13 +209,56 @@ function App() {
           />
         </div>
       );
+      
     })()}
 
     </div>
   )}
+  {history.length > 0 && (
+      <div style={{ marginTop: '2rem', textAlign: 'center' }}>
+        <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>🔍 Search History</h2>
+        <ul style={{ listStyleType: 'none', padding: 0 }}>
+        {history.map((cityName, index) => (
+           <li
+          key={index}
+          style={{
+            margin: '0.5rem 0',
+            color: '#f0f0f0',
+            cursor: 'pointer',
+            textDecoration: 'underline',
+          }}
+          onClick={() => {
+            setCity(cityName);
+            getWeather();
+          }}
+        >
+          {cityName}
+        </li>
+        
+        ))}
+      </ul>
+      </div>
+    )}
+
 
         
   </div>
+    
+    <button
+      onClick={() => setHistory([])}
+      style={{
+        marginTop: '1rem',
+        backgroundColor: '#ff5555',
+        color: 'white',
+        padding: '0.5rem 1rem',
+        border: 'none',
+        borderRadius: '8px',
+        cursor: 'pointer',
+        fontWeight: 'bold'
+        }}
+      >
+      🗑️ Clear History
+    </button>
 
       
   {showVideo && (
