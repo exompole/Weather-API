@@ -10,7 +10,7 @@ function VideoPlayer({ videoSrc }) {
         loop
         style={{
           position: "absolute",
-          top: "32%",
+          top: "20%",
           left: "25%",
           transform: "translate(-50%, -50%)",
           width: "15%",
@@ -26,7 +26,7 @@ function VideoPlayer({ videoSrc }) {
         loop
         style={{
           position: "absolute",
-          top: "32%",
+          top: "20%",
           right: "25%",
           transform: "translate(50%, -50%)",
           width: "15%",

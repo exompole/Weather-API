@@ -22,12 +22,6 @@ const getFunnyTejasMessage = (weather) => {
       image: rainyTejas
     };
   }
-  if (condition.includes('cloud')) {
-    return {
-      message: "🌥 Tejas's hair are missing but the clouds are not!",
-      image: cloudyTejas
-    };
-  }
   if (temp <= 10) {
     return {
       message: "❄️ lay ghan dhandi aahe, Tejas is in his blanket!",
@@ -35,6 +29,13 @@ const getFunnyTejasMessage = (weather) => {
     };
   }
 
+  if (condition.includes('cloud')) {
+    return {
+      message: "🌥 Tejas's hair are missing but the clouds are not!",
+      image: cloudyTejas
+    };
+  }
+ 
   return {
     message: "🤔 Tejas doesn't know this weather but he's vibing anyway!",
     image: unknownTejas

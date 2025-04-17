@@ -13,6 +13,7 @@ import VideoPlayer from "./Components/VideoPlayer";
 import SearchHistory from "./Components/SearchHistory";
 import getFunnyTejasMessage from "./Components/getFunnyTejasMessage";
 import getWeatherData from "./Components/getWeatherData";
+import TempToggle from "./Components/Temptoggle";
 
 function App() {
   const [city, setCity] = useState("");
@@ -21,6 +22,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const [history, setHistory] = useState([]);
+  const [isCelsius, setIsCelsius] = useState(true);
 
   const getWeather = async () => {
     if (!city) return;
@@ -44,6 +46,10 @@ function App() {
       setLoading(false);
     }
   };
+  const handleHistoryClick = (selectedCity) => {
+    setCity(selectedCity);
+    setTimeout(() => getWeather(), 100);
+  };
 
   return (
     <div
@@ -59,7 +65,6 @@ function App() {
         position: "relative",
       }}
     >
-      {/* Header */}
       <div style={{ textAlign: "center" }}>
         <img
           src={weatherIcon}
@@ -83,7 +88,6 @@ function App() {
         </h1>
       </div>
 
-      {/* Main Weather Box */}
       <div
         style={{
           maxWidth: "400px",
@@ -116,22 +120,24 @@ function App() {
           🔍 Search
         </button>
 
-        {loading && <LoadingSpinner />}
-        {error && <ErrorMessage error={error} />}
+        <TempToggle isCelsius={isCelsius} setIsCelsius={setIsCelsius} />
+
         {weather && (
           <WeatherDisplay
             weather={weather}
             getFunnyTejasMessage={getFunnyTejasMessage}
+            isCelsius={isCelsius}
           />
         )}
+        {loading && <LoadingSpinner />}
+        {error && <ErrorMessage error={error} />}
       </div>
 
-      
       {history.length > 0 && (
         <div
           style={{
             position: "absolute",
-            top: "65%",
+            top: "52%",
             left: "16.4rem",
             transform: "translateY(-50%)",
             backgroundColor: "rgba(0, 0, 0, 0.6)",
@@ -141,7 +147,11 @@ function App() {
             zIndex: 5,
           }}
         >
-          <SearchHistory history={history} />
+          <SearchHistory
+            history={history}
+            onHistoryClick={handleHistoryClick}
+          />
+
           <button
             onClick={() => setHistory([])}
             style={{
@@ -161,7 +171,6 @@ function App() {
         </div>
       )}
 
-      {/* Video Overlay */}
       {showVideo && <VideoPlayer videoSrc={successVideo} />}
     </div>
   );
