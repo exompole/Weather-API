@@ -41,7 +41,7 @@ function App() {
       setShowVideo(true);
       setTimeout(() => setShowVideo(false), 1000000000);
     } catch (err) {
-      setError("Nav Chukicha Takla Bhava Ashi City Ahaich Nahi");
+      setError("The city you've entered does not exists or there maybe a typo.");
     } finally {
       setLoading(false);
     }
